@@ -16,7 +16,7 @@ formal/               # equivalência RTL × netlist
 upf/                  # intenção de potência
 docs/
   architecture/       # pontos a definir na arquitetura
-  spec/               # especificação fornecida pelo instrutor
+  spec/               # especificação fornecida 
   reports/            # relatórios semanais e logs reais
   backlog.md          # cronograma e tarefas
 Makefile
@@ -53,7 +53,7 @@ Ao criar módulos, inclua-os em `scripts/rtl.f`; testbenches em `scripts/tb.f`. 
 
 ## Próximos passos
 
-Completar o estudo AES/SPI, obter a especificação funcional e definir a arquitetura com o instrutor e o verificador. O sistema final precisa de AES, SPI no domínio SCLK, CDC, registradores, reset, PLL e subsistema de dados/memória. As interfaces devem ser compatíveis com as da trilha de verificação.
+Completar o estudo AES/SPI, obter a especificação funcional e definir a arquitetura e o verificador. O sistema final precisa de AES, SPI no domínio SCLK, CDC, registradores, reset, PLL e subsistema de dados/memória. As interfaces devem ser compatíveis com as da trilha de verificação.
 
 Síntese, Formality e UPF serão acrescentados nas etapas correspondentes, com a biblioteca e os requisitos reais do projeto. Os scripts avançados da primeira versão continuam recuperáveis pelo histórico Git.
 
