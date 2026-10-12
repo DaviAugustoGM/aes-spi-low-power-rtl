@@ -17,4 +17,3 @@ Fonte: arquivo local `D:\Dowloads\VendingMachine-master.zip`, fornecido pelo usu
 | Logs, netlists, ondas, relatórios e work antigos | Não copiados; não são evidências deste projeto |
 
 O enunciado fornecido é referência de requisitos e cronograma. Não fornece a especificação funcional detalhada, nem autoriza marcar as semanas concluídas. Não se supõe que a figura ausente tenha sido analisada.
-

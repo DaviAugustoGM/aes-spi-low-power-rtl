@@ -19,7 +19,7 @@ vvp simv
 PASS: reset assertion, synchronized release and ready
 ```
 
-Lint e compilação sem avisos. A simulação verifica asserção de reset fora da borda, liberação sincronizada, ready e reaplicação de reset. As listas de fontes, sintaxe dos scripts Python, listagem de presets Tcl e interface do coletor de relatórios também foram verificadas.
+Lint e compilação sem avisos. O comando também passou em um clone local limpo, sem reaproveitar arquivos de build. A simulação verifica asserção de reset fora da borda, liberação sincronizada, ready e reaplicação de reset. As listas de fontes, sintaxe dos scripts Python, listagem de presets Tcl e interface do coletor de relatórios também foram verificadas.
 
 ## Problemas e limites
 
