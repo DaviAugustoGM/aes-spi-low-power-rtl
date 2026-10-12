@@ -41,7 +41,7 @@ python scripts/run.py smoke
 
 ## Síntese e equivalência
 
-O fluxo reaproveitado usa Design Compiler e, inicialmente, SAED32. Confirme com o instrutor a biblioteca e os presets antes de usar. Não versione bibliotecas proprietárias.
+O fluxo reaproveitado usa Design Compiler e, inicialmente, SAED32. Confirme a biblioteca e os presets antes de usar. Não versione bibliotecas proprietárias.
 
 ```sh
 export SAED32_TARGET_LIB=/caminho/da/biblioteca.db
@@ -58,4 +58,4 @@ Os resultados antigos da máquina de vendas não foram copiados. Relatórios de 
 
 ## Desenvolvimento e entregas
 
-Consulte [backlog](docs/backlog.md), [arquitetura inicial](docs/arquitetura.md) e [origem da adaptação](docs/reaproveitamento.md). Use relatórios `docs/reports/semana_XX.md` e tags semanais após cumprir o critério de aceite. Nenhuma entrega funcional de AES está concluída nesta base.
+Consulte [backlog](docs/backlog.md), [arquitetura inicial](docs/arquitetura.md)
