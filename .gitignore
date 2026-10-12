@@ -1,14 +1,20 @@
-# Temporary outputs only. Reports and tool scripts remain versionable.
+# Saídas temporárias
 build/
 __pycache__/
 *.pyc
-synth/work/
-synth/runs/
 *.log
 *.key
-*.fsdb
 *.vcd
-command.log
-default.svf
-alib-*/
+*.fsdb
+simv
+simv.daidir/
+csrc/
 work/
+WORK/
+spyglass.out
+scripts/lint/
+verdiLog/
+novas.*
+
+# Evidências reais dos entregáveis
+!docs/reports/logs/*.log

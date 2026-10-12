@@ -1,61 +1,60 @@
-# AES com SPI e baixo consumo — base do projeto RTL
+# AES com SPI e baixo consumo
 
-Estrutura inicial extraída e adaptada de `VendingMachine-master.zip` para o trabalho de 15 semanas. O fluxo genérico de Design Compiler, presets, sweep e coleta de resultados foi reaproveitado. A simulação e o Formality foram adaptados para o novo projeto.
+Esboço do projeto RTL de 15 semanas. A estrutura segue o exemplo simples fornecido, com um teste mínimo para conferir o ambiente.
 
-**Estado atual:** infraestrutura e exemplo mínimo de reset. Ainda não implementa criptografia AES, interface SPI, memória, PLL ou modos de energia. A interface de `aes_spi_top` é provisória; não representa a interface final do instrutor.
+**Estado atual:** somente exemplo de reset e sinal `ready`. AES, SPI, PLL, memória e controle de energia ainda serão desenvolvidos. A interface atual de `aes_spi_top` é provisória.
 
-## Organização
+## Estrutura
 
-| Pasta | Uso |
-|---|---|
-| `rtl/aes/` | Transformações, expansão de chave e controle AES |
-| `rtl/spi/`, `rtl/registers/`, `rtl/cdc/` | SPI em SCLK, registradores no clock do sistema e travessias |
-| `rtl/reset/` | Reset por domínio de clock |
-| `rtl/data/`, `rtl/power/` | Subsistema de dados e controlador de energia |
-| `models/` | Modelos comportamentais de PLL e memória, fora da síntese |
-| `sim/` | Teste mínimo, testes unitários e integração |
-| `synth/` | Design Compiler, tecnologia, restrições, presets e relatórios |
-| `fm/` | Formality RTL × netlist com SVF da mesma síntese |
-| `constraints/`, `upf/` | Reservadas para restrições do sistema final e intenção de potência |
-| `docs/` | Backlog, arquitetura, decisões e relatórios semanais |
-
-## Fluxo mínimo
-
-Em Linux/WSL, disponibilize Python 3, GNU Make, Verilator e Icarus Verilog (`iverilog` e `vvp`) no PATH. Então:
-
-```sh
-make smoke
+```text
+rtl/                  # RTL sintetizável, sem subdivisões por enquanto
+models/               # futuros modelos de PLL e memória, fora da síntese
+tb/                   # testbenches
+scripts/              # listas de fontes e configuração de lint
+syn/                  # síntese e SDC, a partir da semana 7
+formal/               # equivalência RTL × netlist
+upf/                  # intenção de potência
+docs/
+  architecture/       # pontos a definir na arquitetura
+  spec/               # especificação fornecida pelo instrutor
+  reports/            # relatórios semanais e logs reais
+  backlog.md          # cronograma e tarefas
+Makefile
 ```
 
-Esse comando faz lint do RTL, compila e simula o teste de reset. Deve terminar com `PASS: reset assertion, synchronized release and ready`. Saídas temporárias ficam em `build/sim/`, incluindo `waves.vcd`. O teste cobre reset inicial, liberação após dois ciclos, sinal ready e novo reset durante operação.
+## Executar
 
-Com VCS configurado: `make smoke SIMULATOR=vcs` (lint continua usando Verilator). Para simulação sem lint: `make sim SIMULATOR=vcs`.
-
-Sem Make, inclusive no Windows com as ferramentas no PATH:
+Em Linux ou WSL, com GNU Make, Verilator e Icarus Verilog no PATH:
 
 ```sh
-python scripts/run.py smoke
+git clone https://github.com/DaviAugustoGM/aes-spi-low-power-rtl.git
+cd aes-spi-low-power-rtl
+make test
 ```
 
-`python scripts/run.py check` valida somente as listas de fontes; não substitui compilação ou simulação. Os scripts funcionam a partir de qualquer diretório. Adicione fontes sintetizáveis em `rtl/files.f` e fontes de simulação em `sim/files.f`.
-
-## Síntese e equivalência
-
-O fluxo reaproveitado usa Design Compiler e, inicialmente, SAED32. Confirme a biblioteca e os presets antes de usar. Não versione bibliotecas proprietárias.
+No ambiente Synopsys do curso, após carregar as ferramentas:
 
 ```sh
-export SAED32_TARGET_LIB=/caminho/da/biblioteca.db
-make synth
-make formal
-make collect_synth
+make test TOOLCHAIN=synopsys
 ```
 
-`synth/config.tcl` seleciona `aes_spi_top` e permite overrides `SYNTH_PERIOD`, `SYNTH_PRESET`, `SYNTH_MODE`, `SYNTH_SAIF_FILE` e outros herdados. A restrição atual é apenas para o exemplo de clock único, com período didático de 20 ns; não é um SDC final do sistema AES/SPI.
+Essa opção usa SpyGlass e VCS. O caminho para carregar o ambiente depende do servidor do curso. O fluxo Synopsys ainda não foi validado nesta base.
 
-O Formality lê `synth/results/aes_spi_top.svf` e `aes_spi_top_netlist.v`, gerados juntos por `make synth`. Reexecute síntese após alterar RTL ou configuração. O fluxo encerra com erro se a equivalência não passar. Ainda requer validação no ambiente Synopsys do instrutor.
+`make test` executa lint, compilação e simulação. Também existem `make lint`, `make compile` e `make sim`. Qualquer falha de comando ou teste interrompe o fluxo. O resultado esperado da simulação é:
 
-Os resultados antigos da máquina de vendas não foram copiados. Relatórios de síntese/formal podem ser versionados; temporários ficam ignorados. Relatórios selecionados do sweep devem ser copiados de `synth/runs/` para uma pasta de entrega versionada junto com a configuração que os gerou.
+```text
+PASS: reset assertion, synchronized release and ready
+PASS: fluxo mínimo concluído
+```
 
-## Desenvolvimento e entregas
+O teste verifica reset inicial, liberação sincronizada e reset durante operação. Binários e ondas ficam em `build/`; logs ficam em `docs/reports/logs/`, separados por ferramenta. O lint verifica apenas RTL; não é uma análise de CDC.
 
-Consulte [backlog](docs/backlog.md), [arquitetura inicial](docs/arquitetura.md)
+Ao criar módulos, inclua-os em `scripts/rtl.f`; testbenches em `scripts/tb.f`. Modelos comportamentais devem entrar somente na lista de simulação. Atualize o top do Makefile e do projeto de lint quando necessário.
+
+## Próximos passos
+
+Completar o estudo AES/SPI, obter a especificação funcional e definir a arquitetura com o instrutor e o verificador. O sistema final precisa de AES, SPI no domínio SCLK, CDC, registradores, reset, PLL e subsistema de dados/memória. As interfaces devem ser compatíveis com as da trilha de verificação.
+
+Síntese, Formality e UPF serão acrescentados nas etapas correspondentes, com a biblioteca e os requisitos reais do projeto. Os scripts avançados da primeira versão continuam recuperáveis pelo histórico Git.
+
+Consulte [backlog](docs/backlog.md) e [relatório da semana 1](docs/reports/semana_01.md). Não há entrega funcional de AES concluída.

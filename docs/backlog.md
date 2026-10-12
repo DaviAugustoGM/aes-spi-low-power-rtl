@@ -22,9 +22,11 @@ Todas as semanas permanecem abertas até cumprir os critérios do enunciado.
 
 ## Próximas tarefas
 
-- [x] Extrair infraestrutura genérica de Vending Machine e retirar referências funcionais antigas.
+- [x] Manter estrutura simples, listas de fontes e fluxo mínimo executável.
 - [x] Criar exemplo mínimo e teste de reset.
-- [ ] Registrar validação do ambiente e completar o estudo AES/SPI da semana 1.
+- [x] Validar lint, compilação e simulação no WSL com ferramentas abertas.
+- [ ] Validar o fluxo Synopsys no ambiente do curso.
+- [ ] Completar o estudo AES/SPI da semana 1.
 - [ ] Obter especificação funcional e interfaces do RTL de referência.
 - [ ] Confirmar biblioteca, ferramentas e estratégia de modelos com instrutor/verificador.
 - [ ] Implementar o AES após confirmar escopo e ordem dos bytes.

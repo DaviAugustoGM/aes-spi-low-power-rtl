@@ -1,32 +1,30 @@
-# Semana 01 — preparação da estrutura
+# Semana 01 — estrutura e ambiente
 
 ## O que foi feito
 
-- Extração seletiva do fluxo genérico de síntese de Vending Machine.
-- Organização de RTL, modelos, simulação, CDC, energia, documentação e relatórios.
-- Adaptação do top, manifestos, scripts de simulação e Formality.
-- Exemplo mínimo de reset, teste dirigido, backlog e registro das interfaces pendentes.
+A base foi simplificada seguindo a organização do exemplo `aes-spi-crypto-accelerator-main.zip`: RTL, modelos, testbenches, scripts, síntese, formal, UPF e documentação.
 
-## Resultados e evidências
+O fluxo mínimo fica no Makefile. Foram mantidos o exemplo de reset, teste autoverificável, backlog e listas de fontes compartilhadas. Presets, sweep, coletor de métricas e scripts avançados de síntese/formal foram retirados do esboço; permanecem no histórico Git para consulta futura.
 
-Validação local em Ubuntu/WSL, com Icarus Verilog 12.0 e Verilator 5.032:
+## Resultados
+
+Validação em Ubuntu/WSL com Verilator 5.032 e Icarus Verilog 12.0:
 
 ```text
-$ make smoke
-verilator --lint-only --top-module aes_spi_top -Wall ...
-iverilog -g2012 -Wall -s tb_smoke ...
-vvp simv
+$ make test
+Lint: sem erros ou avisos
+Compilação: sem erros ou avisos
 PASS: reset assertion, synchronized release and ready
+PASS: fluxo mínimo concluído
 ```
 
-Lint e compilação sem avisos. O comando também passou em um clone local limpo, sem reaproveitar arquivos de build. A simulação verifica asserção de reset fora da borda, liberação sincronizada, ready e reaplicação de reset. As listas de fontes, sintaxe dos scripts Python, listagem de presets Tcl e interface do coletor de relatórios também foram verificadas.
+Logs reais em `docs/reports/logs/open_lint.log`, `open_compile.log` e `open_sim.log`. O teste cobre reset inicial, liberação sincronizada e reset durante operação. Esses resultados são somente do exemplo mínimo.
 
-## Problemas e limites
+## Pendências
 
-O teste gera uma transição explícita de reset para evitar depender da inicialização do simulador. Nenhum vetor AES foi testado, pois o núcleo ainda não existe. VCS, Design Compiler, Formality, CDC e ferramentas power-aware não foram executados. Não existem métricas de área, timing ou potência deste projeto.
+- Completar o estudo AES/SPI da semana 1.
+- Executar `make test TOOLCHAIN=synopsys` no ambiente do curso; essa opção não foi validada localmente.
+- Obter a especificação funcional e confirmar as interfaces com o instrutor/verificador.
+- Desenvolver AES, SPI, PLL, memória, CDC e energia nas etapas previstas.
 
-Faltam a especificação funcional detalhada, biblioteca/PDK e interfaces compatíveis com o verificador. O relatório de estudo sobre AES/SPI da semana 1 ainda está pendente; esta página registra somente a preparação do ambiente.
-
-## Próximos passos
-
-Completar o estudo da semana 1, obter a especificação, definir a arquitetura e revisar as interfaces com o instrutor/verificador antes de implementar os blocos.
+Não houve execução de síntese, equivalência formal ou simulação power-aware. A semana 1 permanece pendente de estudo e aceite; nenhuma entrega funcional de AES está concluída.
