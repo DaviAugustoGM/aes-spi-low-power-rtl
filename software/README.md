@@ -1,6 +1,6 @@
 # Estudo do AES em C++
 
-`AES_v2.cpp` é o código fornecido pelo autor para acompanhar a cifração de um bloco com AES-128. Foi acrescentado `#include <cstdint>` para declarar `uint8_t` e `uint32_t`, e o texto foi normalizado para UTF-8; a lógica foi preservada. O arquivo original em Downloads não foi alterado.
+`AES_v2.cpp` é o código fornecido para acompanhar a cifração de um bloco com AES-128.
 
 ## Executar
 
@@ -28,13 +28,13 @@ No exemplo definido em `main`, mensagem e chave têm exatamente 16 bytes:
 | Chave em hexadecimal | `492073656520746865206d6573736167` |
 | Resultado em hexadecimal | `d51a01d792041808474f5907787f7b5e` |
 
-A compilação e execução foram verificadas localmente. Esse resultado foi comparado com `openssl enc -aes-128-ecb`, sem padding e sem salt, para os mesmos 16 bytes e chave, e coincidiu. Essa comparação valida o exemplo executado; os demais vetores e estados intermediários ainda precisam ser verificados antes de usar o código como referência dos testes RTL.
+A compilação e execução foram verificadas localmente.
 
 O compilador avisa que `decrypted_message` não é utilizada. O programa implementa apenas cifração, não decifração, SPI ou modos de energia. Para trocar mensagem/chave, edite `main` e mantenha entradas de 16 bytes; o código não trata mensagens de tamanho arbitrário.
 
 ## Confirmar por decifração em Python
 
-`decrypt.py` é o script fornecido pelo autor, preservado sem alterações. Ele usa PyCryptodome para decifrar com a mesma chave do exemplo C++ e AES em modo ECB, sem padding.
+`decrypt.py` é o script fornecido. Ele usa PyCryptodome para decifrar com a mesma chave do exemplo C++ e AES em modo ECB, sem padding.
 
 Instale a dependência no ambiente Python escolhido:
 
