@@ -1,0 +1,14 @@
+# Temporary outputs only. Reports and tool scripts remain versionable.
+build/
+__pycache__/
+*.pyc
+synth/work/
+synth/runs/
+*.log
+*.key
+*.fsdb
+*.vcd
+command.log
+default.svf
+alib-*/
+work/
