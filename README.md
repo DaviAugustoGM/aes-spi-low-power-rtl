@@ -9,6 +9,7 @@ Esboço do projeto RTL de 15 semanas. A estrutura segue o exemplo simples fornec
 ```text
 rtl/                  # RTL sintetizável, sem subdivisões por enquanto
 models/               # futuros modelos de PLL e memória, fora da síntese
+software/             # código C++ de estudo do AES
 tb/                   # testbenches
 scripts/              # listas de fontes e configuração de lint
 syn/                  # síntese e SDC, a partir da semana 7
@@ -50,6 +51,16 @@ PASS: fluxo mínimo concluído
 O teste verifica reset inicial, liberação sincronizada e reset durante operação. Binários e ondas ficam em `build/`; logs ficam em `docs/reports/logs/`, separados por ferramenta. O lint verifica apenas RTL; não é uma análise de CDC.
 
 Ao criar módulos, inclua-os em `scripts/rtl.f`; testbenches em `scripts/tb.f`. Modelos comportamentais devem entrar somente na lista de simulação. Atualize o top do Makefile e do projeto de lint quando necessário.
+
+## Estudo do AES em C++
+
+Seu código está em [software/AES_v2.cpp](software/AES_v2.cpp), separado do RTL. Com um compilador C++ disponível, execute:
+
+```sh
+make aes-study
+```
+
+O programa imprime os estados intermediários das rodadas e salva a saída em `docs/reports/logs/aes_cpp.log`. Veja [como interpretar os resultados](software/README.md). Este exemplo de software não altera o estado de implementação do núcleo RTL.
 
 ## Próximos passos
 

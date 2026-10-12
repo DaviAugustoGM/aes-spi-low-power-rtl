@@ -42,3 +42,12 @@ sim: compile
 
 smoke: test
 run: sim
+
+# Estudo do algoritmo em C++; independente das ferramentas RTL.
+.PHONY: aes-study
+aes-study:
+	@command -v $(CXX) >/dev/null || { echo "Compilador C++ ausente: $(CXX)"; exit 1; }
+	@mkdir -p $(BUILD) $(LOG_DIR)
+	$(CXX) -std=c++17 -Wall -Wextra -pedantic software/AES_v2.cpp -o $(BUILD)/aes_study
+	./$(BUILD)/aes_study | tee $(LOG_DIR)/aes_cpp.log
+	@echo
