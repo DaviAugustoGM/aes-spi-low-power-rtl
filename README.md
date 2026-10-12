@@ -62,6 +62,8 @@ make aes-study
 
 O programa imprime os estados intermediários das rodadas e salva a saída em `docs/reports/logs/aes_cpp.log`. Veja [como interpretar os resultados](software/README.md). Este exemplo de software não altera o estado de implementação do núcleo RTL.
 
+Para decifrar o resultado e conferir a mensagem original, instale `software/requirements.txt` no seu ambiente Python e execute `python software/decrypt.py` ou `make decrypt`. As instruções e o resultado verificado estão em [software/README.md](software/README.md).
+
 ## Próximos passos
 
 Completar o estudo AES/SPI, obter a especificação funcional e definir a arquitetura e o verificador. O sistema final precisa de AES, SPI no domínio SCLK, CDC, registradores, reset, PLL e subsistema de dados/memória. As interfaces devem ser compatíveis com as da trilha de verificação.

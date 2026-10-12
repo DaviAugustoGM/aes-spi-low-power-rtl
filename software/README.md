@@ -31,3 +31,24 @@ No exemplo definido em `main`, mensagem e chave têm exatamente 16 bytes:
 A compilação e execução foram verificadas localmente. Esse resultado foi comparado com `openssl enc -aes-128-ecb`, sem padding e sem salt, para os mesmos 16 bytes e chave, e coincidiu. Essa comparação valida o exemplo executado; os demais vetores e estados intermediários ainda precisam ser verificados antes de usar o código como referência dos testes RTL.
 
 O compilador avisa que `decrypted_message` não é utilizada. O programa implementa apenas cifração, não decifração, SPI ou modos de energia. Para trocar mensagem/chave, edite `main` e mantenha entradas de 16 bytes; o código não trata mensagens de tamanho arbitrário.
+
+## Confirmar por decifração em Python
+
+`decrypt.py` é o script fornecido pelo autor, preservado sem alterações. Ele usa PyCryptodome para decifrar com a mesma chave do exemplo C++ e AES em modo ECB, sem padding.
+
+Instale a dependência no ambiente Python escolhido:
+
+```sh
+python -m pip install -r software/requirements.txt
+python software/decrypt.py
+```
+
+Informe `d51a01d792041808474f5907787f7b5e`. O resultado verificado é:
+
+```text
+Mensagem original: Hello. I am Davi
+```
+
+Também pode executar `make decrypt` (Python 3 no Linux/WSL) para salvar a saída em `docs/reports/logs/aes_decrypt.log`. Para escolher o interpretador, use `make decrypt PYTHON=python`.
+
+O script espera hexadecimal válido, blocos completos de 16 bytes e texto decifrado em UTF-8. A chave está fixa; se alterá-la no C++, atualize-a aqui também. A recuperação da mensagem confirma o exemplo executado, sem substituir a verificação dos demais vetores AES e das etapas intermediárias.

@@ -51,3 +51,10 @@ aes-study:
 	$(CXX) -std=c++17 -Wall -Wextra -pedantic software/AES_v2.cpp -o $(BUILD)/aes_study
 	./$(BUILD)/aes_study | tee $(LOG_DIR)/aes_cpp.log
 	@echo
+
+# Decifração interativa do resultado hexadecimal do exemplo C++.
+PYTHON ?= python3
+.PHONY: decrypt
+decrypt:
+	@mkdir -p $(LOG_DIR)
+	$(PYTHON) software/decrypt.py | tee $(LOG_DIR)/aes_decrypt.log
