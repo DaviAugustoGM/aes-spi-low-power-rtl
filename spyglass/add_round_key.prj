@@ -1,0 +1,15 @@
+# Executar da raiz do projeto. SpyGlass Explorer / classic.
+set_option enableSV yes
+set_option language_mode mixed
+set_option projectwdir build/spyglass_add_round_key
+set_option top minisoc_aes_add_round_key
+set_option enable_pass_exit_codes true
+read_file -type verilog rtl/minisoc_aes/minisoc_aes_add_round_key.sv
+if {[info exists ::env(SPYGLASS_METHODOLOGY)]} {
+    current_methodology $::env(SPYGLASS_METHODOLOGY)
+} elseif {[file isdirectory $SPYGLASS_HOME/GuideWare/2025.06/block/rtl_handoff]} {
+    current_methodology $SPYGLASS_HOME/GuideWare/2025.06/block/rtl_handoff
+} else {
+    current_methodology $SPYGLASS_HOME/GuideWare2.0/block/rtl_handoff
+}
+current_goal lint/lint_rtl

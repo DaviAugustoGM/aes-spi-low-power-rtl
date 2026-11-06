@@ -1,12 +1,12 @@
 # Backlog inicial
 
-Todas as semanas permanecem abertas até cumprir os critérios do enunciado.
+O aceite das semanas depende dos critérios do enunciado e da revisão do instrutor. O status abaixo registra apenas a implementação e a verificação realizadas.
 
 | Semana | Trabalho / critério a verificar |
 |---|---|
 | 01 | Estrutura, fluxo mínimo, estudo FIPS-197/SPI, relatório e execução em clone limpo |
 | 02 | Especificação detalhada, interfaces, registradores, clocks/reset/CDC, modelos e defesa |
-| 03 | SubBytes, ShiftRows, MixColumns, AddRoundKey e vetores intermediários |
+| 03 | SubBytes, ShiftRows, MixColumns, AddRoundKey e vetores intermediários — implementados; evidências em [semana 03](reports/semana_03.md) |
 | 04 | Expansão de chave, controle e vetores AES completos |
 | 05 | SPI, banco de registradores, travessia, reset e modelo PLL; testes dirigidos |
 | 06 | Subsistema de dados, memória, integração, teste fim a fim, lint/CDC e RTL v1.0 |
@@ -29,6 +29,7 @@ Todas as semanas permanecem abertas até cumprir os critérios do enunciado.
 - [ ] Completar o estudo AES/SPI da semana 1.
 - [ ] Obter especificação funcional e interfaces do RTL de referência.
 - [ ] Confirmar biblioteca, ferramentas e estratégia de modelos com instrutor/verificador.
-- [ ] Implementar o AES após confirmar escopo e ordem dos bytes.
+- [x] Implementar e verificar as quatro transformações combinacionais AES, com byte 0 em `[127:120]`.
+- [ ] Integrar expansão de chave e controle AES (semana 04).
 
 Marcos futuros: `w06-rtl-v1.0`, `w09-rtl-v1.1`, `w13-rtl-v2.0`. Não criar tags de aceite antecipadamente.

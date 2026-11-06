@@ -59,15 +59,17 @@ decrypt:
 	@mkdir -p $(LOG_DIR)
 	$(PYTHON) software/decrypt.py | tee $(LOG_DIR)/aes_decrypt.log
 
-# Semana 02: blocos combinacionais MiniSoC AES (fluxo independente).
+# Semanas 02 e 03: blocos combinacionais MiniSoC AES (fluxo independente).
 VCS ?= vcs
 SPYGLASS ?= spyglass
 AES_RTL := rtl/minisoc_aes/minisoc_aes_sbox.sv \
            rtl/minisoc_aes/minisoc_aes_sub_bytes.sv \
-           rtl/minisoc_aes/minisoc_aes_shift_rows.sv
+           rtl/minisoc_aes/minisoc_aes_shift_rows.sv \
+           rtl/minisoc_aes/minisoc_aes_mix_columns.sv \
+           rtl/minisoc_aes/minisoc_aes_add_round_key.sv
 .PHONY: minisoc-test minisoc-compile minisoc-run minisoc-lint minisoc-all
 minisoc-all: minisoc-test minisoc-lint
-minisoc-test: minisoc-run
+minisoc-test: minisoc-run minisoc-week3-test
 minisoc-compile:
 	@mkdir -p build/minisoc
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -top tb_minisoc_aes \
@@ -81,3 +83,13 @@ minisoc-lint:
 	$(SPYGLASS) -project spyglass/sbox.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_sbox.log 2>&1
 	$(SPYGLASS) -project spyglass/sub_bytes.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_sub_bytes.log 2>&1
 	$(SPYGLASS) -project spyglass/shift_rows.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_shift_rows.log 2>&1
+	$(SPYGLASS) -project spyglass/mix_columns.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_mix_columns.log 2>&1
+	$(SPYGLASS) -project spyglass/add_round_key.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_add_round_key.log 2>&1
+
+.PHONY: minisoc-week3-test
+minisoc-week3-test:
+	@mkdir -p build/minisoc_week3
+	$(VCS) -full64 -sverilog -timescale=1ns/1ps -top tb_minisoc_aes_week3 \
+	    -Mdir=build/minisoc_week3/csrc -o $(CURDIR)/build/minisoc_week3/simv \
+	    -l build/minisoc_week3/vcs_compile.log $(AES_RTL) tb/tb_minisoc_aes_week3.sv
+	./build/minisoc_week3/simv -no_save -l build/minisoc_week3/vcs_sim.log

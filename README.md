@@ -2,7 +2,7 @@
 
 Esboço do projeto RTL de 15 semanas. A estrutura segue o exemplo simples fornecido, com um teste mínimo para conferir o ambiente.
 
-**Estado atual:** exemplo de reset e sinal `ready`, mais os blocos combinacionais S-Box, SubBytes e ShiftRows da semana 02. AES, SPI, PLL, memória e controle de energia ainda serão desenvolvidos. A interface atual de `aes_spi_top` é provisória.
+**Estado atual:** exemplo de reset e sinal `ready`, mais os blocos combinacionais S-Box, SubBytes e ShiftRows da semana 02 e MixColumns e AddRoundKey da semana 03. AES, SPI, PLL, memória e controle de energia ainda serão desenvolvidos. A interface atual de `aes_spi_top` é provisória.
 
 ## Estrutura
 
@@ -77,9 +77,17 @@ Consulte [backlog](docs/backlog.md) e [relatório da semana 1](docs/reports/sema
 Três módulos combinacionais em `rtl/minisoc_aes/`, com estado em ordem de colunas e byte 0 em `[127:120]`. O testbench autoverificável cobre as 256 entradas da S-Box, SubBytes e ShiftRows nas rodadas 1 e 10 do exemplo AES-128 FIPS-197 e a permutação de bytes 00..0F.
 
 ```sh
-make minisoc-test  # VCS
-make minisoc-lint  # SpyGlass, três tops independentes
+make minisoc-test  # VCS: regressao das semanas 02 e 03
+make minisoc-lint  # SpyGlass, cinco tops independentes
 make minisoc-all
 ```
 
 Requer `vcs` e `spyglass` no PATH e licenças válidas; caminhos podem ser definidos com `VCS=...` e `SPYGLASS=...`. Os alvos anteriores continuam disponíveis. No laboratório, carregue primeiro `source /Tools/synopsys-scripts/snps.sh`. A metodologia pode ser sobrescrita com a variável de ambiente `SPYGLASS_METHODOLOGY`. Logs e arquivos gerados ficam em `build/` e não entram na entrega. O lint usa redirecionamento do shell, pois `-log` é incompatível com `-project`. Consulte os resultados e limitações em [semana 02](docs/reports/semana_02.md).
+
+## MiniSoC AES — semana 03
+
+Escopo seguido: linha da semana 03 do [backlog](docs/backlog.md), com as quatro transformações AES e vetores intermediários. `minisoc_aes_mix_columns` faz a multiplicação por coluna em GF(2^8); `minisoc_aes_add_round_key` recebe a chave da rodada e aplica XOR ao estado. Ambos são combinacionais, sem clock ou reset, com a mesma ordem de bytes da semana 02.
+
+O novo `tb/tb_minisoc_aes_week3.sv` compõe as quatro transformações e confere todos os estados intermediários das dez rodadas do exemplo AES-128 FIPS-197 C.1. As chaves são constantes de referência fornecidas pelo testbench; a décima rodada omite MixColumns. Também cobre 4.096 casos dirigidos de MixColumns com modelo polinomial independente, 384 casos dirigidos de AddRoundKey e 1.000 combinações pseudoaleatórias reproduzíveis.
+
+`make minisoc-week3-test` executa somente o novo testbench; `make minisoc-test` preserva e executa também os testes da semana 02. `make minisoc-lint` inclui projetos independentes para os cinco módulos. Resultados, evidências e limitações em [semana 03](docs/reports/semana_03.md). A expansão de chave e o controlador AES continuam previstos para a semana 04.
