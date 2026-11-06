@@ -100,3 +100,15 @@ Materiais desenvolvidos por Davi Augusto:
 
 - [Vídeo ADD ROUND KEY — 1,67×](docs/architecture/assets/add_round_key_speed_1.67x.mp4)
 - [Descrição e pontos de integração](docs/architecture/README.md)
+
+### Acompanhar as transformações no terminal
+
+`make minisoc-week3-test` mostra cada rodada do exemplo FIPS-197, com entrada, saída e chave aplicada em AddRoundKey. Cada etapa recebe `[PASS]` somente após comparar a saída real com a referência. Na décima rodada, a saída indica que MixColumns é omitido e mostra o ciphertext final. Os testes dirigidos e pseudoaleatórios mantêm saída resumida.
+
+Para ver também as matrizes AES 4×4 lado a lado, com as linhas na horizontal e as colunas na vertical:
+
+```sh
+make minisoc-week3-test MINISOC_SIM_ARGS=+AES_MATRIX
+```
+
+O trace apresenta valores estabilizados dos circuitos combinacionais; não representa execução de um controlador por ciclos de clock.

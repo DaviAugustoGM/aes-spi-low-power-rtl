@@ -86,10 +86,11 @@ minisoc-lint:
 	$(SPYGLASS) -project spyglass/mix_columns.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_mix_columns.log 2>&1
 	$(SPYGLASS) -project spyglass/add_round_key.prj -goals lint/lint_rtl -batch > build/minisoc/spyglass_add_round_key.log 2>&1
 
+MINISOC_SIM_ARGS ?=
 .PHONY: minisoc-week3-test
 minisoc-week3-test:
 	@mkdir -p build/minisoc_week3
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -top tb_minisoc_aes_week3 \
 	    -Mdir=build/minisoc_week3/csrc -o $(CURDIR)/build/minisoc_week3/simv \
 	    -l build/minisoc_week3/vcs_compile.log $(AES_RTL) tb/tb_minisoc_aes_week3.sv
-	./build/minisoc_week3/simv -no_save -l build/minisoc_week3/vcs_sim.log
+	./build/minisoc_week3/simv -no_save -l build/minisoc_week3/vcs_sim.log $(MINISOC_SIM_ARGS)

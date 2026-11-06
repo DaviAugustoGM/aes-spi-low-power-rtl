@@ -52,6 +52,34 @@ module tb_minisoc_aes_week3;
             $fatal(1, "%s: esperado=%032h recebido=%032h", description, expected, got);
     endtask
 
+    // Trace only the FIPS example; exhaustive/random checks keep their summaries.
+    // Values below come from the DUT, after the existing #1 settling delay.
+    task automatic trace_transform(
+        input string description,
+        input logic [127:0] input_state, output_state, expected_state,
+        input bit has_key = 0,
+        input logic [127:0] applied_key = '0
+    );
+        check128(output_state, expected_state, description);
+        $display("  %s [PASS]", description);
+        $display("    Entrada : %032h", input_state);
+        if (has_key) $display("    Chave   : %032h", applied_key);
+        $display("    Saida   : %032h", output_state);
+        if ($test$plusargs("AES_MATRIX")) begin
+            $display("    Matriz de entrada       -> Matriz de saida");
+            for (int row = 0; row < 4; row++) begin
+                $write("      ");
+                for (int col = 0; col < 4; col++)
+                    $write("%02h ", input_state[127-8*(4*col+row) -: 8]);
+                $write("          ");
+                for (int col = 0; col < 4; col++)
+                    $write("%02h ", output_state[127-8*(4*col+row) -: 8]);
+                $display("");
+            end
+        end
+        $display("");
+    endtask
+
     // Independent polynomial multiplication: form a 16-bit product, then
     // reduce modulo 0x11b. Does not reuse the DUT's xtime formulation.
     function automatic logic [7:0] gf_mul(input logic [7:0] a, b);
@@ -90,6 +118,11 @@ module tb_minisoc_aes_week3;
     endfunction
 
     initial begin
+        $display("\n=== AES-128: transformacoes da semana 03 ===");
+        $display("Valores hexadecimais; byte 0 em [127:120], estado em ordem de colunas.");
+        $display("Circuitos combinacionais; o trace mostra valores estabilizados, sem ciclos de clock.");
+        $display("Chaves de rodada fornecidas pelo testbench (FIPS-197 C.1).");
+        $display("Use +AES_MATRIX para exibir tambem as matrizes 4x4.\n");
         mix_in = '0; ark_in = '0; key_in = '0; round_in = '0; round_key = '0;
         #1;
         check128(mix_out, '0, "MixColumns zero");
@@ -97,24 +130,31 @@ module tb_minisoc_aes_week3;
         ark_in = 128'h00112233445566778899aabbccddeeff;
         key_in = 128'h000102030405060708090a0b0c0d0e0f;
         #1;
-        check128(ark_out, START_REF[1], "AddRoundKey inicial FIPS");
+        $display("--- RODADA 0: AddRoundKey inicial ---");
+        trace_transform("AddRoundKey: estado XOR chave", ark_in, ark_out, START_REF[1], 1, key_in);
         round_in = ark_out;
         for (int r = 1; r <= 10; r++) begin
             round_key = KEYS[r];
             #1;
             check128(round_in, START_REF[r], $sformatf("Inicio rodada %0d", r));
-            check128(sub_out, SUB_REF[r], $sformatf("SubBytes rodada %0d", r));
-            check128(shift_out, SHIFT_REF[r], $sformatf("ShiftRows rodada %0d", r));
+            $display("--- RODADA %0d/10 ---", r);
+            trace_transform("SubBytes: substituicao dos 16 bytes pela S-Box", round_in, sub_out, SUB_REF[r]);
+            trace_transform("ShiftRows: deslocamento circular das linhas", sub_out, shift_out, SHIFT_REF[r]);
             if (r < 10) begin
-                check128(mixed_out, MIX_REF[r], $sformatf("MixColumns rodada %0d", r));
-                check128(round_out, START_REF[r+1], $sformatf("AddRoundKey rodada %0d", r));
+                trace_transform("MixColumns: mistura das quatro colunas em GF(2^8)", shift_out, mixed_out, MIX_REF[r]);
+                trace_transform("AddRoundKey: estado XOR chave da rodada", mixed_out, round_out, START_REF[r+1], 1, round_key);
                 round_in = round_out;
             end else begin
                 // Final AES round omits MixColumns.
-                check128(final_out, 128'h69c4e0d86a7b0430d8cdb78070b4c55a, "Saida FIPS");
+                $display("  MixColumns omitido na rodada final, conforme AES.\n");
+                trace_transform("AddRoundKey final: estado XOR chave da rodada", shift_out, final_out,
+                                128'h69c4e0d86a7b0430d8cdb78070b4c55a, 1, round_key);
+                $display("CIPHERTEXT: %032h\n", final_out);
             end
         end
         $display("PASS: FIPS-197 C.1, todos os estados intermediarios, rodadas 1..10");
+
+        $display("\n=== Testes dirigidos e pseudoaleatorios (resumo) ===");
 
         // All byte values at every position; other bytes zero. Covers reduction
         // with bit 7 set, matrix orientation and isolation between columns.

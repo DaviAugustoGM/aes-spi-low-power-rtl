@@ -49,3 +49,12 @@ SpyGlass também emite aviso de infraestrutura `POLICY_DEPRECATED` sobre políti
 A composição de rodadas existe no testbench para verificar as transformações; não é um controlador AES sintetizável. As chaves de rodada são fornecidas pelo testbench. Expansão de chave, controle, protocolo de entrada/saída e validação do núcleo AES integrado pertencem à semana 04. Não houve síntese, medição de área/timing/potência, formal, SPI, CDC ou integração de baixo consumo nesta entrega.
 
 Implementação e verificação do escopo da semana 03 no backlog concluídas; aceite acadêmico depende da revisão do instrutor e do enunciado oficial.
+
+## Visualização das transformações no terminal
+
+O testbench passou a exibir o AddRoundKey inicial e as dez rodadas com os valores reais de entrada/saída de cada transformação, chave aplicada em cada AddRoundKey e `[PASS]` após a comparação com a referência. A rodada final informa que MixColumns é omitido e apresenta o ciphertext. Os testes dirigidos e pseudoaleatórios continuam resumidos.
+
+- `make minisoc-week3-test`: trace hexadecimal.
+- `make minisoc-week3-test MINISOC_SIM_ARGS=+AES_MATRIX`: inclui matrizes 4×4 de entrada e saída lado a lado, respeitando a ordem de colunas AES.
+
+Ambos os modos foram executados no VCS X-2025.06-SP2 em 06/11/2026: código 0, `ALL WEEK 3 TESTS PASSED` e 5.492 ns. Conferidos 40 passos com `[PASS]`, 11 chaves e o ciphertext FIPS esperado; o modo de matrizes apresentou 40 pares de matrizes. Os logs permanecem em `build/minisoc_week3/` e não são versionados. A mudança é restrita ao testbench, argumentos de simulação e documentação; o RTL não mudou, portanto o lint não foi repetido.
