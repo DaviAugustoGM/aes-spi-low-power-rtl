@@ -16,5 +16,9 @@ scripts/lint/
 verdiLog/
 novas.*
 
-# Evidências reais dos entregáveis
-!docs/reports/logs/*.log
+# Logs existentes permanecem no histórico; novos logs não são versionados.
+
+DVEfiles/
+*.vpd
+*.vdb/
+novas*

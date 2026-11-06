@@ -2,7 +2,7 @@
 
 Esboço do projeto RTL de 15 semanas. A estrutura segue o exemplo simples fornecido, com um teste mínimo para conferir o ambiente.
 
-**Estado atual:** somente exemplo de reset e sinal `ready`. AES, SPI, PLL, memória e controle de energia ainda serão desenvolvidos. A interface atual de `aes_spi_top` é provisória.
+**Estado atual:** exemplo de reset e sinal `ready`, mais os blocos combinacionais S-Box, SubBytes e ShiftRows da semana 02. AES, SPI, PLL, memória e controle de energia ainda serão desenvolvidos. A interface atual de `aes_spi_top` é provisória.
 
 ## Estrutura
 
@@ -70,4 +70,16 @@ Completar o estudo AES/SPI, obter a especificação funcional e definir a arquit
 
 Síntese, Formality e UPF serão acrescentados nas etapas correspondentes, com a biblioteca e os requisitos reais do projeto. Os scripts avançados da primeira versão continuam recuperáveis pelo histórico Git.
 
-Consulte [backlog](docs/backlog.md) e [relatório da semana 1](docs/reports/semana_01.md). Não há entrega funcional de AES concluída.
+Consulte [backlog](docs/backlog.md) e [relatório da semana 1](docs/reports/semana_01.md). O núcleo AES completo ainda não está integrado.
+
+## MiniSoC AES — semana 02
+
+Três módulos combinacionais em `rtl/minisoc_aes/`, com estado em ordem de colunas e byte 0 em `[127:120]`. O testbench autoverificável cobre as 256 entradas da S-Box, SubBytes e ShiftRows nas rodadas 1 e 10 do exemplo AES-128 FIPS-197 e a permutação de bytes 00..0F.
+
+```sh
+make minisoc-test  # VCS
+make minisoc-lint  # SpyGlass, três tops independentes
+make minisoc-all
+```
+
+Requer `vcs` e `spyglass` no PATH e licenças válidas; caminhos podem ser definidos com `VCS=...` e `SPYGLASS=...`. Os alvos anteriores continuam disponíveis. No laboratório, carregue primeiro `source /Tools/synopsys-scripts/snps.sh`. A metodologia pode ser sobrescrita com a variável de ambiente `SPYGLASS_METHODOLOGY`. Logs e arquivos gerados ficam em `build/` e não entram na entrega. O lint usa redirecionamento do shell, pois `-log` é incompatível com `-project`. Consulte os resultados e limitações em [semana 02](docs/reports/semana_02.md).
