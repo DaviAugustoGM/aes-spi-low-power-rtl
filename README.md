@@ -91,3 +91,12 @@ Escopo seguido: linha da semana 03 do [backlog](docs/backlog.md), com as quatro 
 O novo `tb/tb_minisoc_aes_week3.sv` compõe as quatro transformações e confere todos os estados intermediários das dez rodadas do exemplo AES-128 FIPS-197 C.1. As chaves são constantes de referência fornecidas pelo testbench; a décima rodada omite MixColumns. Também cobre 4.096 casos dirigidos de MixColumns com modelo polinomial independente, 384 casos dirigidos de AddRoundKey e 1.000 combinações pseudoaleatórias reproduzíveis.
 
 `make minisoc-week3-test` executa somente o novo testbench; `make minisoc-test` preserva e executa também os testes da semana 02. `make minisoc-lint` inclui projetos independentes para os cinco módulos. Resultados, evidências e limitações em [semana 03](docs/reports/semana_03.md). A expansão de chave e o controlador AES continuam previstos para a semana 04.
+
+## Diagrama e vídeo da arquitetura
+
+Materiais desenvolvidos por Davi Augusto:
+
+![Diagrama da arquitetura AES](docs/architecture/assets/aes_architecture.png)
+
+- [Vídeo ADD ROUND KEY — 1,67×](docs/architecture/assets/add_round_key_speed_1.67x.mp4)
+- [Descrição e pontos de integração](docs/architecture/README.md)
